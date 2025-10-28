@@ -9,6 +9,8 @@ export class AuthController {
       const body = await request.json();
       const { email, password } = body;
 
+      console.log("Login attempt:", { email, password: "***" }); // Debug log
+
       if (!email || !password) {
         const response: ApiResponse = {
           success: false,
@@ -18,6 +20,8 @@ export class AuthController {
       }
 
       const user = await authService.login({ email, password });
+
+      console.log("Login successful for user:", user.id); // Debug log
 
       const cookieStore = await cookies();
       cookieStore.set("session", `user-${user.id}`, {
@@ -35,7 +39,7 @@ export class AuthController {
 
       return NextResponse.json(response);
     } catch (error: any) {
-      console.error("AuthController.login error:", error);
+      console.error("AuthController.login error:", error.message); // Better error log
 
       const response: ApiResponse = {
         success: false,
