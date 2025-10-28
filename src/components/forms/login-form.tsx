@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/actions/auth/login";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -21,17 +20,25 @@ export function LoginForm() {
     setError("");
 
     try {
-      const result = await loginAction(email, password);
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      if (result.success) {
+      const data = await response.json();
+
+      if (data.success) {
         // Success! Redirect to dashboard
         router.push("/dashboard");
         router.refresh();
       } else {
-        setError(result.error || "Login failed");
+        setError(data.error || "Login failed");
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError("Network error. Please try again.");
     } finally {
       setIsLoading(false);
     }
