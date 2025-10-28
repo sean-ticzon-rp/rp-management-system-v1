@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { LogoutButton } from "@/components/auth/logout-button";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -38,14 +39,7 @@ export default async function DashboardPage() {
         </div>
 
         <div className="mt-8">
-          <form action="/api/auth/logout" method="POST">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            >
-              Logout
-            </button>
-          </form>
+          <LogoutButton />
         </div>
       </div>
     </div>
